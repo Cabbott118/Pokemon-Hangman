@@ -117,130 +117,191 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"assets/javascript/game.js":[function(require,module,exports) {
-var x = window.matchMedia('(max-width: 1025px)');
+})({"assets/javascript/keyboard.js":[function(require,module,exports) {
+function _createForOfIteratorHelper(o) { if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) { var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var it, normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
 
-if (x.matches) {
-  console.log('small screen');
-  document.getElementById('vkb-toggle').style.display = 'initial';
-} else {
-  console.log('big screen');
-  document.getElementById('vkb-toggle').style.display = 'none';
-} // Allows the virtual keyboard to only appear on small screens (mobile) as the base game requires a keyboard
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-x.addListener(function (changed) {
-  if (changed.matches) {
-    console.log('small screen');
-    document.getElementById('vkb-toggle').style.display = 'initial';
-  } else {
-    console.log('big screen');
-  }
-}); //Assigning Global Variables
+// Keyboard logic from - https://codepen.io/dcode-software/pen/KYYKxP?fbclid=IwAR0MXx7zVEQIxo-MT2TVRDdzUDK-t4QPkBc1g3IgVED26BDGATCLrQLS2l0
+// Certain code as been altered to better suit the site.
+var Keyboard = {
+  elements: {
+    main: null,
+    keysContainer: null,
+    keys: []
+  },
+  eventHandlers: {
+    oninput: null,
+    onclose: null
+  },
+  properties: {
+    value: '',
+    capsLock: false
+  },
+  lastKeyPressed: '',
+  init: function init() {
+    var _this = this;
 
-var baseURL = 'https://pokeapi.co/api/v2/pokemon?limit=151';
-var possiblePokemon = [];
-axios.get(baseURL).then(function (res) {
-  var pokesArray = res.data.results;
+    // Create main elements
+    this.elements.main = document.createElement('div');
+    this.elements.keysContainer = document.createElement('div'); // Setup main elements
 
-  for (var i = 0; i < pokesArray.length; i++) {
-    var pokemon = pokesArray[i].name;
-    possiblePokemon.push(pokemon);
-  }
-});
-var maxGuesses = 10;
-var guessedLetters = [];
-var guessingName;
-var nameToMatch;
-var numGuesses;
-var wins = 0;
-var losses = 0; //Used to reset current Pokemon display, and start game
+    this.elements.main.classList.add('keyboard', 'keyboard--hidden');
+    this.elements.keysContainer.classList.add('keyboard__keys');
+    this.elements.keysContainer.appendChild(this._createKeys());
+    this.elements.keys = this.elements.keysContainer.querySelectorAll('.keyboard__key'); // Add to DOM
 
-setTimeout(resetPokemon, 1000);
+    this.elements.main.appendChild(this.elements.keysContainer);
+    document.body.appendChild(this.elements.main); // Automatically use keyboard for elements with .use-keyboard-input
 
-function resetPokemon() {
-  //Fills remaining guesses with max(10)
-  numGuesses = maxGuesses; //Pulls random Pokemon from array
+    document.querySelectorAll('.use-keyboard-input').forEach(function (element) {
+      element.addEventListener('focus', function () {
+        _this.open(element.value, function (currentValue) {
+          element.value = currentValue;
+        });
+      });
+    });
+  },
+  _createKeys: function _createKeys() {
+    var _this2 = this;
 
-  nameToMatch = possiblePokemon[Math.floor(Math.random() * possiblePokemon.length)].toUpperCase();
-  axios.get("https://pokeapi.co/api/v2/pokemon/".concat(nameToMatch.toLowerCase(), "/")).then(function (res) {
-    var pokeImg = res.data.sprites.front_default;
-    document.getElementById('pokemonImg').src = pokeImg;
-  }); //If you'd like to cheat, here you go
+    var fragment = document.createDocumentFragment();
+    var keyLayout = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'backspace', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'enter', 'done', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '?', 'space']; // Creates HTML for an icon
 
-  console.log(nameToMatch); //Empty arrays for storing guessed letters
+    var createIconHTML = function createIconHTML(icon_name) {
+      return "<i class=\"material-icons\">".concat(icon_name, "</i>");
+    };
 
-  guessedLetters = [];
-  guessingName = [];
+    keyLayout.forEach(function (key) {
+      var keyElement = document.createElement('button');
+      var insertLineBreak = ['backspace', 'p', 'enter', '?'].indexOf(key) !== -1; // Add attributes/classes
 
-  for (var i = 0, _x = nameToMatch.length; i < _x; i++) {
-    if (nameToMatch[i] === ' ') {
-      guessingName.push(' ');
-    } else {
-      guessingName.push('_ ');
-    }
-  }
+      keyElement.setAttribute('type', 'button');
+      keyElement.classList.add('keyboard__key');
 
-  updateScreen();
-} //Check if key input is alpha
+      switch (key) {
+        case 'backspace':
+          keyElement.classList.add('keyboard__key--wide');
+          keyElement.innerHTML = createIconHTML('del');
+          keyElement.addEventListener('click', function () {
+            _this2.properties.value = _this2.properties.value.substring(0, _this2.properties.value.length - 1);
 
+            _this2._triggerEvent('oninput');
 
-var isAlpha = function isAlpha(ch) {
-  return /^[A-Z]$/i.test(ch);
-}; //Start game if letter is pressed
+            Keyboard.lastKeyPressed = '';
+          });
+          break;
 
+        case 'caps':
+          keyElement.classList.add('keyboard__key--wide', 'keyboard__key--activatable');
+          keyElement.innerHTML = createIconHTML('caps');
+          keyElement.addEventListener('click', function () {
+            _this2._toggleCapsLock();
 
-document.onkeyup = function (event) {
-  if (isAlpha(event.key)) {
-    checkForLetter(event.key.toUpperCase()); //Alert user to input alpha key if non-alpha key is released
-  } else alert('Please enter an Alphabetic key to play!');
-}; //Function for checking letter inputs against randomly selected Pokemon name
+            keyElement.classList.toggle('keyboard__key--active', _this2.properties.capsLock);
+            Keyboard.lastKeyPressed = '';
+          });
+          break;
 
+        case 'enter':
+          keyElement.classList.add('keyboard__key--wide');
+          keyElement.innerHTML = createIconHTML('return');
+          keyElement.addEventListener('click', function () {
+            _this2.properties.value += '\n';
 
-function checkForLetter(letter) {
-  //Create local var to be used for non correct keys
-  var foundLetter = false; //For loop for correct letters
+            _this2._triggerEvent('oninput');
 
-  for (var i = 0, _x2 = nameToMatch.length; i < _x2; i++) {
-    if (letter === nameToMatch[i]) {
-      guessingName[i] = letter;
-      foundLetter = true; //Increment wins and update screen
+            Keyboard.lastKeyPressed = '\n';
+          });
+          break;
 
-      if (guessingName.join('') === nameToMatch) {
-        wins++;
-        setTimeout(resetPokemon, 3000);
+        case 'space':
+          keyElement.classList.add('keyboard__key--extra-wide');
+          keyElement.innerHTML = createIconHTML('space');
+          keyElement.addEventListener('click', function () {
+            _this2.properties.value += ' ';
+
+            _this2._triggerEvent('oninput');
+
+            Keyboard.lastKeyPressed = ' ';
+          });
+          break;
+
+        case 'done':
+          keyElement.classList.add('keyboard__key--wide', 'keyboard__key--dark');
+          keyElement.innerHTML = createIconHTML('close KB');
+          keyElement.addEventListener('click', function () {
+            _this2.close();
+
+            _this2._triggerEvent('onclose');
+
+            Keyboard.lastKeyPressed = '';
+          });
+          break;
+
+        default:
+          keyElement.textContent = key.toLowerCase();
+          keyElement.addEventListener('click', function () {
+            _this2.properties.value += _this2.properties.capsLock ? key.toUpperCase() : key.toLowerCase();
+
+            _this2._triggerEvent('oninput');
+
+            Keyboard.lastKeyPressed = key;
+          });
+          break;
       }
+
+      fragment.appendChild(keyElement);
+
+      if (insertLineBreak) {
+        fragment.appendChild(document.createElement('br'));
+      }
+    });
+    return fragment;
+  },
+  _triggerEvent: function _triggerEvent(handlerName) {
+    if (typeof this.eventHandlers[handlerName] == 'function') {
+      this.eventHandlers[handlerName](this.properties.value);
     }
+  },
+  _toggleCapsLock: function _toggleCapsLock() {
+    this.properties.capsLock = !this.properties.capsLock;
 
-    updateScreen();
-  } //If wrong letter, decrement remaining guesses
+    var _iterator = _createForOfIteratorHelper(this.elements.keys),
+        _step;
 
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var key = _step.value;
 
-  if (!foundLetter) {
-    if (!guessedLetters.includes(letter)) {
-      guessedLetters.push(letter);
-      numGuesses--;
-    } //If remaining guesses equals 0, increment losses and update screen
-
-
-    if (numGuesses === 0) {
-      guessingName = nameToMatch.split();
-      losses++;
-      setTimeout(resetPokemon, 3000);
+        if (key.childElementCount === 0) {
+          key.textContent = this.properties.capsLock ? key.textContent.toUpperCase() : key.textContent.toLowerCase();
+        }
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
     }
+  },
+  open: function open(initialValue, oninput, onclose) {
+    this.properties.value = initialValue || '';
+    this.eventHandlers.oninput = oninput;
+    this.eventHandlers.onclose = onclose;
+    this.elements.main.classList.remove('keyboard--hidden');
+  },
+  close: function close() {
+    this.properties.value = '';
+    this.eventHandlers.oninput = oninput;
+    this.eventHandlers.onclose = onclose;
+    this.elements.main.classList.add('keyboard--hidden');
   }
-
-  updateScreen();
-} //Update HTML
-
-
-function updateScreen() {
-  document.getElementById('totalWins').innerText = wins;
-  document.getElementById('totalLosses').innerText = losses;
-  document.getElementById('currentPokemon').innerText = guessingName.join('');
-  document.getElementById('remainingGuesses').innerText = numGuesses;
-  document.getElementById('guessedLetters').innerText = guessedLetters.join(' ');
-}
+};
+window.addEventListener('DOMContentLoaded', function () {
+  Keyboard.init();
+});
 },{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -445,5 +506,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","assets/javascript/game.js"], null)
-//# sourceMappingURL=/game.a2aac56f.js.map
+},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","assets/javascript/keyboard.js"], null)
+//# sourceMappingURL=/keyboard.5698dee2.js.map

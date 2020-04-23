@@ -117,131 +117,79 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"assets/javascript/game.js":[function(require,module,exports) {
-var x = window.matchMedia('(max-width: 1025px)');
+})({"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
 
-if (x.matches) {
-  console.log('small screen');
-  document.getElementById('vkb-toggle').style.display = 'initial';
-} else {
-  console.log('big screen');
-  document.getElementById('vkb-toggle').style.display = 'none';
-} // Allows the virtual keyboard to only appear on small screens (mobile) as the base game requires a keyboard
-
-
-x.addListener(function (changed) {
-  if (changed.matches) {
-    console.log('small screen');
-    document.getElementById('vkb-toggle').style.display = 'initial';
-  } else {
-    console.log('big screen');
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
   }
-}); //Assigning Global Variables
 
-var baseURL = 'https://pokeapi.co/api/v2/pokemon?limit=151';
-var possiblePokemon = [];
-axios.get(baseURL).then(function (res) {
-  var pokesArray = res.data.results;
+  return bundleURL;
+}
 
-  for (var i = 0; i < pokesArray.length; i++) {
-    var pokemon = pokesArray[i].name;
-    possiblePokemon.push(pokemon);
-  }
-});
-var maxGuesses = 10;
-var guessedLetters = [];
-var guessingName;
-var nameToMatch;
-var numGuesses;
-var wins = 0;
-var losses = 0; //Used to reset current Pokemon display, and start game
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
 
-setTimeout(resetPokemon, 1000);
-
-function resetPokemon() {
-  //Fills remaining guesses with max(10)
-  numGuesses = maxGuesses; //Pulls random Pokemon from array
-
-  nameToMatch = possiblePokemon[Math.floor(Math.random() * possiblePokemon.length)].toUpperCase();
-  axios.get("https://pokeapi.co/api/v2/pokemon/".concat(nameToMatch.toLowerCase(), "/")).then(function (res) {
-    var pokeImg = res.data.sprites.front_default;
-    document.getElementById('pokemonImg').src = pokeImg;
-  }); //If you'd like to cheat, here you go
-
-  console.log(nameToMatch); //Empty arrays for storing guessed letters
-
-  guessedLetters = [];
-  guessingName = [];
-
-  for (var i = 0, _x = nameToMatch.length; i < _x; i++) {
-    if (nameToMatch[i] === ' ') {
-      guessingName.push(' ');
-    } else {
-      guessingName.push('_ ');
+    if (matches) {
+      return getBaseURL(matches[0]);
     }
   }
 
-  updateScreen();
-} //Check if key input is alpha
+  return '/';
+}
 
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
 
-var isAlpha = function isAlpha(ch) {
-  return /^[A-Z]$/i.test(ch);
-}; //Start game if letter is pressed
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
 
+function updateLink(link) {
+  var newLink = link.cloneNode();
 
-document.onkeyup = function (event) {
-  if (isAlpha(event.key)) {
-    checkForLetter(event.key.toUpperCase()); //Alert user to input alpha key if non-alpha key is released
-  } else alert('Please enter an Alphabetic key to play!');
-}; //Function for checking letter inputs against randomly selected Pokemon name
+  newLink.onload = function () {
+    link.remove();
+  };
 
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
 
-function checkForLetter(letter) {
-  //Create local var to be used for non correct keys
-  var foundLetter = false; //For loop for correct letters
+var cssTimeout = null;
 
-  for (var i = 0, _x2 = nameToMatch.length; i < _x2; i++) {
-    if (letter === nameToMatch[i]) {
-      guessingName[i] = letter;
-      foundLetter = true; //Increment wins and update screen
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
 
-      if (guessingName.join('') === nameToMatch) {
-        wins++;
-        setTimeout(resetPokemon, 3000);
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
       }
     }
 
-    updateScreen();
-  } //If wrong letter, decrement remaining guesses
-
-
-  if (!foundLetter) {
-    if (!guessedLetters.includes(letter)) {
-      guessedLetters.push(letter);
-      numGuesses--;
-    } //If remaining guesses equals 0, increment losses and update screen
-
-
-    if (numGuesses === 0) {
-      guessingName = nameToMatch.split();
-      losses++;
-      setTimeout(resetPokemon, 3000);
-    }
-  }
-
-  updateScreen();
-} //Update HTML
-
-
-function updateScreen() {
-  document.getElementById('totalWins').innerText = wins;
-  document.getElementById('totalLosses').innerText = losses;
-  document.getElementById('currentPokemon').innerText = guessingName.join('');
-  document.getElementById('remainingGuesses').innerText = numGuesses;
-  document.getElementById('guessedLetters').innerText = guessedLetters.join(' ');
+    cssTimeout = null;
+  }, 50);
 }
-},{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+module.exports = reloadCSS;
+},{"./bundle-url":"node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"assets/css/keyboard.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -445,5 +393,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","assets/javascript/game.js"], null)
-//# sourceMappingURL=/game.a2aac56f.js.map
+},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
+//# sourceMappingURL=/keyboard.868fd568.js.map
