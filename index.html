@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="./assets/css/reset.css" />
+    <link rel="stylesheet" href="./assets/css/style.css" />
     <link
       href="https://fonts.googleapis.com/css?family=Alfa+Slab+One&display=swap"
       rel="stylesheet"
@@ -13,25 +14,28 @@
   </head>
 
   <body>
-    <h1 id="headerText">Who's that Pokemon?!</h1>
-    <h2 id="startText">Press any key to get started!</h2>
     <div class="mainContent">
+      <h1 id="headerText">Who's that Pokemon?!</h1>
+      <h2 id="startText">Press any key to get started!</h2>
+
       <!-- When user presses any key, start game -->
       <h4>Wins:</h4>
-      <div id="totalWins"></div>
-      <br />
+      <div class="center" id="totalWins"></div>
+      <!-- <br /> -->
       <h4>Losses:</h4>
-      <div id="totalLosses"></div>
-      <br />
+      <div class="center" id="totalLosses"></div>
+      <!-- <br /> -->
       <h4>Current Pokemon:</h4>
-      <div id="currentPokemon"></div>
-      <img id="pokemonImg" src="" />
-      <br />
-      <h4>Number of Guesses Left:</h4>
-      <div id="remainingGuesses"></div>
-      <br />
+      <div class="center" id="currentPokemon"></div>
+      <div class="center">
+        <img id="pokemonImg" src="" />
+      </div>
+      <!-- <br /> -->
+      <h4>Number of Incorrect Guesses Left:</h4>
+      <div class="center" id="remainingGuesses"></div>
+      <!-- <br /> -->
       <h4>Incorrect Letters Guessed:</h4>
-      <div id="guessedLetters"></div>
+      <div class="center" id="guessedLetters"></div>
     </div>
 
     <script src="assets/javascript/game.js"></script>

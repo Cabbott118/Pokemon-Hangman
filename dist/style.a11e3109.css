@@ -1,13 +1,28 @@
 body {
+  margin: 15px;
+  max-height: 100vh;
+  max-width: 100vw;
   background: url('/whosThatPokemon.7828b7be.png');
   background-repeat: no-repeat;
   background-size: cover;
   font-family: 'Alfa Slab One', cursive;
-  max-height: 100vh;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+h1,
+h2,
+h4,
+.center {
+  padding: 5px;
+  color: #3e60a3;
+  text-align: center;
+  text-shadow: 3px 3px 6px #fcce00;
 }
 
 #pokemonImg {
-  /* height: 200px; */
   filter: brightness(0.2);
   -webkit-filter: brightness(0.2);
 }
