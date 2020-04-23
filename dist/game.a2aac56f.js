@@ -118,26 +118,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"assets/javascript/game.js":[function(require,module,exports) {
-var x = window.matchMedia('(max-width: 1025px)');
-
-if (x.matches) {
-  console.log('small screen');
-  document.getElementById('vkb-toggle').style.display = 'initial';
-} else {
-  console.log('big screen');
-  document.getElementById('vkb-toggle').style.display = 'none';
-} // Allows the virtual keyboard to only appear on small screens (mobile) as the base game requires a keyboard
-
-
-x.addListener(function (changed) {
-  if (changed.matches) {
-    console.log('small screen');
-    document.getElementById('vkb-toggle').style.display = 'initial';
-  } else {
-    console.log('big screen');
-  }
-}); //Assigning Global Variables
-
+//Assigning Global Variables
 var baseURL = 'https://pokeapi.co/api/v2/pokemon?limit=151';
 var possiblePokemon = [];
 axios.get(baseURL).then(function (res) {
@@ -174,7 +155,7 @@ function resetPokemon() {
   guessedLetters = [];
   guessingName = [];
 
-  for (var i = 0, _x = nameToMatch.length; i < _x; i++) {
+  for (var i = 0, x = nameToMatch.length; i < x; i++) {
     if (nameToMatch[i] === ' ') {
       guessingName.push(' ');
     } else {
@@ -205,7 +186,7 @@ function checkForLetter(letter) {
 
   var foundLetter = false; //For loop for correct letters
 
-  for (var i = 0, _x2 = nameToMatch.length; i < _x2; i++) {
+  for (var i = 0, x = nameToMatch.length; i < x; i++) {
     if (letter === nameToMatch[i]) {
       guessingName[i] = letter;
       foundLetter = true; //Increment wins and update screen

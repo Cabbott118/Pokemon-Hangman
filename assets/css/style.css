@@ -23,7 +23,7 @@ h4,
 }
 
 #inputDiv {
-  visibility: hidden;
+  /* visibility: hidden; */
 }
 
 .pokemonImg {

@@ -1,23 +1,3 @@
-let x = window.matchMedia('(max-width: 1025px)');
-
-if (x.matches) {
-  console.log('small screen');
-  document.getElementById('vkb-toggle').style.display = 'initial';
-} else {
-  console.log('big screen');
-  document.getElementById('vkb-toggle').style.display = 'none';
-}
-
-// Allows the virtual keyboard to only appear on small screens (mobile) as the base game requires a keyboard
-x.addListener(function (changed) {
-  if (changed.matches) {
-    console.log('small screen');
-    document.getElementById('vkb-toggle').style.display = 'initial';
-  } else {
-    console.log('big screen');
-  }
-});
-
 //Assigning Global Variables
 const baseURL = 'https://pokeapi.co/api/v2/pokemon?limit=151';
 const possiblePokemon = [];
