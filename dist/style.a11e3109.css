@@ -3,39 +3,13 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   font-family: 'Alfa Slab One', cursive;
-}
-
-.container {
-  margin: 30px auto;
-  text-align: center;
-  /* color: #FCCE00; */
-  color: #3e60a3;
-  text-shadow: 3px 3px 6px #fcce00;
-  width: 100%;
-}
-
-#currentPokemon {
-  letter-spacing: 3px;
+  max-height: 100vh;
 }
 
 #pokemonImg {
-  height: 200px;
+  /* height: 200px; */
   filter: brightness(0.2);
   -webkit-filter: brightness(0.2);
-}
-
-#guessedLetters {
-  color: red;
-  font-weight: bolder;
-}
-
-h4 {
-  font-weight: bold;
-  z-index: 2;
-}
-
-.backgroundPic {
-  width: 100%;
 }
 
 
