@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 
 //Assigning Global Variables
 const baseURL = 'https://pokeapi.co/api/v2/pokemon?limit=151';
