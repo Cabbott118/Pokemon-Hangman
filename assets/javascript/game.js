@@ -11,8 +11,6 @@ axios.get(baseURL).then((res) => {
     const pokemon = pokesArray[i].name;
     possiblePokemon.push(pokemon);
   }
-
-  console.log(possiblePokemon);
 });
 
 const maxGuesses = 10;
@@ -34,6 +32,13 @@ function resetPokemon() {
   nameToMatch = possiblePokemon[
     Math.floor(Math.random() * possiblePokemon.length)
   ].toUpperCase();
+
+  axios
+    .get(`https://pokeapi.co/api/v2/pokemon/${nameToMatch.toLowerCase()}/`)
+    .then((res) => {
+      let pokeImg = res.data.sprites.front_default;
+      document.getElementById('pokemonImg').src = pokeImg;
+    });
 
   //If you'd like to cheat, here you go
   console.log(nameToMatch);

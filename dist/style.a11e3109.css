@@ -1,35 +1,42 @@
 body {
-    background: url("/whosThatPokemon.7828b7be.png");
-    background-repeat: no-repeat;
-	background-size: cover;
-    font-family: 'Alfa Slab One', cursive;
+  background: url('/whosThatPokemon.7828b7be.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: 'Alfa Slab One', cursive;
 }
 
 .container {
-    margin: 30px auto;
-    text-align: center;
-    /* color: #FCCE00; */
-    color: #3E60A3;
-    text-shadow: 3px 3px 6px #FCCE00;
-    width: 100%;
+  margin: 30px auto;
+  text-align: center;
+  /* color: #FCCE00; */
+  color: #3e60a3;
+  text-shadow: 3px 3px 6px #fcce00;
+  width: 100%;
 }
 
 #currentPokemon {
-    letter-spacing: 3px;
+  letter-spacing: 3px;
+}
+
+#pokemonImg {
+  height: 200px;
+  filter: brightness(0.2);
+  -webkit-filter: brightness(0.2);
 }
 
 #guessedLetters {
-    color: red;
-    font-weight: bolder;
+  color: red;
+  font-weight: bolder;
 }
 
 h4 {
-    font-weight: bold;
-    z-index: 2;
+  font-weight: bold;
+  z-index: 2;
 }
 
 .backgroundPic {
-    width: 100%;
+  width: 100%;
 }
+
 
 /*# sourceMappingURL=/style.a11e3109.css.map */

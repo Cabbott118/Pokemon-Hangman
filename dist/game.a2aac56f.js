@@ -1898,8 +1898,6 @@ _axios.default.get(baseURL).then(function (res) {
     var pokemon = pokesArray[i].name;
     possiblePokemon.push(pokemon);
   }
-
-  console.log(possiblePokemon);
 });
 
 var maxGuesses = 10;
@@ -1916,7 +1914,13 @@ function resetPokemon() {
   //Fills remaining guesses with max(10)
   numGuesses = maxGuesses; //Pulls random Pokemon from array
 
-  nameToMatch = possiblePokemon[Math.floor(Math.random() * possiblePokemon.length)].toUpperCase(); //If you'd like to cheat, here you go
+  nameToMatch = possiblePokemon[Math.floor(Math.random() * possiblePokemon.length)].toUpperCase();
+
+  _axios.default.get("https://pokeapi.co/api/v2/pokemon/".concat(nameToMatch.toLowerCase(), "/")).then(function (res) {
+    var pokeImg = res.data.sprites.front_default;
+    document.getElementById('pokemonImg').src = pokeImg;
+  }); //If you'd like to cheat, here you go
+
 
   console.log(nameToMatch); //Empty arrays for storing guessed letters
 
