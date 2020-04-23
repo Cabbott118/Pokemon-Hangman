@@ -153,6 +153,7 @@ var guessedLetters = [];
 var guessingName;
 var nameToMatch;
 var numGuesses;
+var userGuess;
 var wins = 0;
 var losses = 0; //Used to reset current Pokemon display, and start game
 
@@ -191,14 +192,17 @@ var isAlpha = function isAlpha(ch) {
 
 
 document.onkeyup = function (event) {
-  if (isAlpha(event.key)) {
-    checkForLetter(event.key.toUpperCase()); //Alert user to input alpha key if non-alpha key is released
+  userGuess = event.key;
+
+  if (isAlpha(userGuess)) {
+    checkForLetter(userGuess.toUpperCase()); //Alert user to input alpha key if non-alpha key is released
   } else alert('Please enter an Alphabetic key to play!');
 }; //Function for checking letter inputs against randomly selected Pokemon name
 
 
 function checkForLetter(letter) {
-  //Create local var to be used for non correct keys
+  userGuess = Keyboard.lastKeyPressed; //Create local var to be used for non correct keys
+
   var foundLetter = false; //For loop for correct letters
 
   for (var i = 0, _x2 = nameToMatch.length; i < _x2; i++) {
@@ -238,6 +242,7 @@ function updateScreen() {
   document.getElementById('totalWins').innerText = wins;
   document.getElementById('totalLosses').innerText = losses;
   document.getElementById('currentPokemon').innerText = guessingName.join('');
+  document.getElementById('currentPokemonInput').value = '';
   document.getElementById('remainingGuesses').innerText = numGuesses;
   document.getElementById('guessedLetters').innerText = guessedLetters.join(' ');
 }

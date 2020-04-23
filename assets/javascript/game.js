@@ -36,6 +36,7 @@ let guessedLetters = [];
 let guessingName;
 let nameToMatch;
 let numGuesses;
+let userGuess;
 let wins = 0;
 let losses = 0;
 
@@ -83,14 +84,17 @@ const isAlpha = function (ch) {
 
 //Start game if letter is pressed
 document.onkeyup = function (event) {
-  if (isAlpha(event.key)) {
-    checkForLetter(event.key.toUpperCase());
+  userGuess = event.key;
+
+  if (isAlpha(userGuess)) {
+    checkForLetter(userGuess.toUpperCase());
     //Alert user to input alpha key if non-alpha key is released
   } else alert('Please enter an Alphabetic key to play!');
 };
 
 //Function for checking letter inputs against randomly selected Pokemon name
 function checkForLetter(letter) {
+  userGuess = Keyboard.lastKeyPressed;
   //Create local var to be used for non correct keys
   let foundLetter = false;
 
@@ -131,6 +135,7 @@ function updateScreen() {
   document.getElementById('totalWins').innerText = wins;
   document.getElementById('totalLosses').innerText = losses;
   document.getElementById('currentPokemon').innerText = guessingName.join('');
+  document.getElementById('currentPokemonInput').value = '';
   document.getElementById('remainingGuesses').innerText = numGuesses;
   document.getElementById('guessedLetters').innerText = guessedLetters.join(
     ' '

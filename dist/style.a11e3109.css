@@ -22,9 +22,18 @@ h4,
   text-shadow: 3px 3px 6px #fcce00;
 }
 
-#pokemonImg {
+#inputDiv {
+  visibility: hidden;
+}
+
+.pokemonImg {
   filter: brightness(0.2);
   -webkit-filter: brightness(0.2);
+}
+
+.pokemonShow {
+  filter: brightness(0.7);
+  -webkit-filter: brightness(0.7);
 }
 
 
