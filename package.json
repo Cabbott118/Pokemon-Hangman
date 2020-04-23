@@ -1,0 +1,29 @@
+{
+  "name": "wordguessgame",
+  "version": "1.0.0",
+  "description": "A Pokemon themed word guess game",
+  "main": "game.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cabbott118/Word-Guess-Game.git"
+  },
+  "author": "Caleb Abbott",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Cabbott118/Word-Guess-Game/issues"
+  },
+  "homepage": "https://github.com/Cabbott118/Word-Guess-Game#readme",
+  "dependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/polyfill": "^7.8.7",
+    "axios": "^0.19.2"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4"
+  }
+}

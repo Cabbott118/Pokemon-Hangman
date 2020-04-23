@@ -1,0 +1,33 @@
+body {
+    background: url("../images/whosThatPokemon.png");
+    background-repeat: no-repeat;
+	background-size: cover;
+    font-family: 'Alfa Slab One', cursive;
+}
+
+.container {
+    margin: 30px auto;
+    text-align: center;
+    /* color: #FCCE00; */
+    color: #3E60A3;
+    text-shadow: 3px 3px 6px #FCCE00;
+    width: 100%;
+}
+
+#currentPokemon {
+    letter-spacing: 3px;
+}
+
+#guessedLetters {
+    color: red;
+    font-weight: bolder;
+}
+
+h4 {
+    font-weight: bold;
+    z-index: 2;
+}
+
+.backgroundPic {
+    width: 100%;
+}
