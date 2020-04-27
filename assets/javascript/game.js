@@ -11,7 +11,9 @@ axios.get(baseURL).then((res) => {
   }
 });
 
-const keyboardsletters = 'abcdefghijklmnopqrstuvwxyz';
+const firstRow = 'qwertyuiop-';
+const secondRow = ' asdfghjkl  ';
+const thirdRow = ' zxcvbnm,.';
 const keyboard = document.querySelector('.game__keyboard');
 const maxGuesses = 10;
 let guessedLetters = [];
@@ -25,20 +27,47 @@ let losses = 0;
 setTimeout(resetPokemon, 1000);
 
 keyboardGenerator = () => {
-  let buttons = keyboardsletters
+  let buttonsFirst = firstRow
     .split('')
     .map(
       (letter) =>
         `   
           <button
-          class="game__buttonLetter"
-          id="${letter}"
-          >${letter}</button>
+           class="game__buttonLetter"
+           id="${letter}"
+           >${letter}</button>
       
-      `
+       `
+    )
+    .join('');
+  let buttonsSecond = secondRow
+    .split('')
+    .map(
+      (letter) =>
+        `   
+          <button
+           class="game__buttonLetter"
+           id="${letter}"
+           >${letter}</button>
+      
+       `
+    )
+    .join('');
+  let buttonsThird = thirdRow
+    .split('')
+    .map(
+      (letter) =>
+        `   
+          <button
+           class="game__buttonLetter"
+           id="${letter}"
+           >${letter}</button>
+      
+       `
     )
     .join('');
 
+  let buttons = buttonsFirst + buttonsSecond + buttonsThird;
   keyboard.innerHTML = buttons;
 };
 

@@ -4,7 +4,8 @@
   bottom: 0;
   width: 100%;
   padding: 5px 0;
-  background: #2b2c2c;
+  /* background: #2b2c2c; */
+  background: #243c6b;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
   user-select: none;
   transition: bottom 0.4s;
@@ -18,7 +19,8 @@
   text-align: center;
 }
 
-.keyboard__key {
+/* .keyboard__key { */
+.game__buttonLetter {
   height: 45px;
   width: 6%;
   max-width: 90px;
@@ -39,20 +41,20 @@
   position: relative;
 }
 
-.keyboard__key:active {
+.game__buttonLetter:active {
   background: rgba(255, 255, 255, 0.12);
 }
 
-.keyboard__key--wide {
+.game__buttonLetter--wide {
   width: 12%;
 }
 
-.keyboard__key--extra-wide {
+.game__buttonLetter--extra-wide {
   width: 36%;
   max-width: 500px;
 }
 
-.keyboard__key--activatable::after {
+.game__buttonLetter--activatable::after {
   content: '';
   top: 10px;
   right: 10px;
@@ -63,10 +65,10 @@
   border-radius: 50%;
 }
 
-.keyboard__key--active::after {
+.game__buttonLetter--active::after {
   background: #08ff00;
 }
 
-.keyboard__key--dark {
+.game__buttonLetter--dark {
   background: rgba(0, 0, 0, 0.25);
 }
