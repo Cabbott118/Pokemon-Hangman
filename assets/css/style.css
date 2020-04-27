@@ -8,6 +8,10 @@ body {
   font-family: 'Alfa Slab One', cursive;
 }
 
+.mainContent {
+  min-height: 90vh;
+}
+
 h1 {
   font-size: 24px;
 }
@@ -20,10 +24,6 @@ h4,
   color: #3e60a3;
   text-align: center;
   text-shadow: 3px 3px 6px #fcce00;
-}
-
-#inputDiv {
-  /* visibility: hidden; */
 }
 
 .pokemonImg {
